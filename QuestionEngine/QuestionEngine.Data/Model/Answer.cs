@@ -14,6 +14,8 @@ namespace QuestionEngine.Data.Model
         public DateTime LastModifiedOn { get; set; }
         public string CreatedBy { get; set; }
         public string LastModifiedBy { get; set; }
+        public int QuestionId { get; set; }
+        public Question Question { get; set; }
 
     }
 }
