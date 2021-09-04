@@ -1,6 +1,14 @@
 ﻿@page "/questionAdmin"
+@inject HttpClient Http
 <h3>QuestionAdmin</h3>
 
-@code {
+<p>@obiWan</p>
 
+@code {
+    private string obiWan;
+
+    protected override async Task OnInitializedAsync()
+    {
+        obiWan = await Http.GetFromJsonAsync<string>("QuestionEngine");
+    }
 }
