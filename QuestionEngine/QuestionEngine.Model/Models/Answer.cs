@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestionEngine.Data.Model
+namespace QuestionEngine.Model.Models
 {
     public class Answer
     {
