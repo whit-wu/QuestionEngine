@@ -15,19 +15,21 @@ namespace QuestionEngine.Data
 
         public string DbPath { get; private set; }
 
-        public QuestionEngineContext()
+        private readonly string connectionString;
+
+        public QuestionEngineContext(string connectionString)
         {
-            var folder = Environment.SpecialFolder.LocalApplicationData;
-            var path = Environment.GetFolderPath(folder);
-            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}QuestionEngine.db";
+            this.connectionString = connectionString;
         }
 
-        // The following configures EF to create a Sqlite database file in the
-        // special "local" folder for your platform.
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite($"Data Source={DbPath}");
+        {
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer(connectionString);
+            }
 
 
-
+        }
     }
 }
