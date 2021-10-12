@@ -10,29 +10,29 @@ namespace QuestionEngine.Data
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private QuestionEngineContext context;
+        private QuestionEngineContext _context;
 
         public UnitOfWork()
         {
 
         }
 
-        public UnitOfWork(DbContextOptions options)
+        public UnitOfWork(QuestionEngineContext context)
         {
-            context = new QuestionEngineContext(options);
+            _context = context;
         }
 
         public bool AddQuestion(Question question)
         {
             if (question != null)
             {
-                if (question.AvailableAnswers != null && question.AvailableAnswers.Count > 0)
+                if (question.AvailableAnswers != null && question.AvailableAnswers.Count > 0 && question.ChosenAnswerId > 0)
                 {
 
                     try
                     {
-                        context.Questions.Add(question);
-                        var test = context.SaveChanges();
+                        _context.Questions.Add(question);
+                        var test = _context.SaveChanges();
                         return true;
                     }
                     catch (Exception ex)

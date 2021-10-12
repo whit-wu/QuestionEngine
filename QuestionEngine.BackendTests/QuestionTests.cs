@@ -11,19 +11,30 @@ namespace QuestionEngine.BackendTests
     public class Tests
     {
         private DbContextOptions options;
-        private DbContext context;
+        private QuestionEngineContext _context;
         private string userId = "SYSTEM";
         private IUnitOfWork uow;
 
         [SetUp]
-        public void Setup()
+        public void SetupContext()
         {
             var connection = new SqliteConnection("DataSource=:memory:");
             connection.Open();
 
             options = new DbContextOptionsBuilder<QuestionEngineContext>().UseSqlite(connection).Options;
 
-            uow = new UnitOfWork(options);
+           
+            // allows tables to be created first
+            using (var migContext = new QuestionEngineContext(options))
+            {
+                migContext.Database.EnsureCreated();
+            }
+
+           
+            // the actual context
+            _context = new QuestionEngineContext(options);
+
+            uow = new UnitOfWork(_context);
         }
 
         [Test]
@@ -68,7 +79,7 @@ namespace QuestionEngine.BackendTests
         }
 
         [Test]
-        public void AddQuestion_QuestionToAddIsInvalidBecauseThereIsNoChosenAnswer_ReturnsTrue()
+        public void AddQuestion_QuestionToAddIsInvalidBecauseThereIsNoChosenAnswer_ReturnsFalse()
         {
             // Arrange
 
@@ -106,7 +117,7 @@ namespace QuestionEngine.BackendTests
         }
 
         [Test]
-        public void AddQuestion_QuestionToAddIsInvalidBecauseNoAvailableAnswers_ReturnsTrue()
+        public void AddQuestion_QuestionToAddIsInvalidBecauseNoAvailableAnswers_ReturnsFalse()
         {
             // Arrange
 
