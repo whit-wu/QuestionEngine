@@ -12,12 +12,16 @@ namespace QuestionEngine.Model.Models
     {
         [Required]
         public int Id { get; set; }
+        
         [Required]
         public string Description { get; set; }
+        
         [Required]
         public List<Answer> AvailableAnswers { get; set; }
+        
+
         [Required]
-        public int ChosenAnswerId { get; set; }
+        public int? ChosenAnswerId { get; set; }
 
     }
 }

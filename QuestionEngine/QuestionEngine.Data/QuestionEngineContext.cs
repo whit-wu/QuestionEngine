@@ -53,6 +53,17 @@ namespace QuestionEngine.Data
             return connection;
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Question>()
+                .HasIndex(q => q.Id)
+                .IsUnique();
+
+            modelBuilder.Entity<Answer>()
+                .HasIndex(a => a.Id)
+                .IsUnique();
+        }
+
 
     }
 }

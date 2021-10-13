@@ -12,10 +12,6 @@ namespace QuestionEngine.Data
     {
         private QuestionEngineContext _context;
 
-        public UnitOfWork()
-        {
-
-        }
 
         public UnitOfWork(QuestionEngineContext context)
         {
@@ -26,13 +22,13 @@ namespace QuestionEngine.Data
         {
             if (question != null)
             {
-                if (question.AvailableAnswers != null && question.AvailableAnswers.Count > 0 && question.ChosenAnswerId > 0)
+                if (question.AvailableAnswers != null && question.AvailableAnswers.Count > 0 )
                 {
 
                     try
                     {
                         _context.Questions.Add(question);
-                        var test = _context.SaveChanges();
+                        _context.SaveChanges();
                         return true;
                     }
                     catch (Exception ex)
@@ -46,9 +42,36 @@ namespace QuestionEngine.Data
             }
             return false;
         }
+
         public bool UpdateQuestion(Question question)
         {
-            return true;
+            var questionToUpdate = _context.Questions
+                .Where(q => question.Id == q.Id)
+                .FirstOrDefault();
+
+            if (questionToUpdate != null && question.AvailableAnswers != null && question.AvailableAnswers.Count > 0)
+            {
+                var availableAnswerIds = question.AvailableAnswers.Select(a => a.Id).ToArray();
+                
+                if (!availableAnswerIds.Contains((int)question.ChosenAnswerId))
+                    return false;
+
+                question = questionToUpdate;
+
+                try
+                {
+                    _context.SaveChanges();
+                    return true;
+                }
+                catch(Exception ex)
+                {
+                    return false;
+                }
+                
+                    
+            }
+            
+            return false;
         }
         public bool DeleteQuestionById(int id)
         {

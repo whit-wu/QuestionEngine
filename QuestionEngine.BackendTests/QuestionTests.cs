@@ -137,5 +137,216 @@ namespace QuestionEngine.BackendTests
             Assert.IsFalse(questionWasAdded);
         }
 
+        
+        [Test]
+        public void UpdateQuestion_UpdateIsValid_ReturnsTrue()
+        {
+            // Arrange
+
+            // create the question we want to update then save it
+            var validQuestionToUpdate = new Question()
+            {
+                Id = 3,
+                Description = "Does updating a valid question work?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 5,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 6,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 6
+            };
+
+            _context.Questions.Add(validQuestionToUpdate);
+            _context.SaveChanges();
+
+            // change a property of that question for the purpose of updating
+            validQuestionToUpdate.ChosenAnswerId = 5;
+
+            // Act
+            var isUpdated = uow.UpdateQuestion(validQuestionToUpdate);
+
+            // Assert
+            Assert.IsTrue(isUpdated);
+
+        }
+
+        [Test]
+        public void UpdateQuestion_UpdateIsInvalidBecauseQuestionIsNotFound_ReturnFalse()
+        {
+            // Arrange
+            var question = new Question() {
+                Id = 4,
+                Description = "Should I be able to update a question that does not exist?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 7,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 8,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 8
+
+
+            };
+
+            // Act 
+            var isUpdated = uow.UpdateQuestion(question);
+
+            // Assert
+            Assert.IsFalse(isUpdated);
+        }
+
+
+        [Test]
+        public void UpdateQuestion_UpdateIsInvalidBecauseChosenAnswerNotFound_ReturnFalse()
+        {
+            // Arrange
+            var question = new Question()
+            {
+                Id = 5,
+                Description = "Should I be able to set an answer that does not exist?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 9,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 10,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 10
+
+
+            };
+
+            _context.Questions.Add(question);
+            _context.SaveChanges();
+
+            // change the chosenAnswerId to one that does not exist
+            question.ChosenAnswerId = 11;
+
+
+            // Act 
+            var isUpdated = uow.UpdateQuestion(question);
+
+            // Assert
+            Assert.IsFalse(isUpdated);
+        }
+
+        [Test]
+        public void UpdateQuestion_UpdateIsInvalidBecauseChosenAnswerNotTiedToQuestion_ReturnFalse()
+        {
+            // Arrange
+            var question1 = new Question()
+            {
+                Id = 6,
+                Description = "Should I be able to reference an answer tied to another question?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 12,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 13,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 13
+
+            };
+
+            // Arrange
+            var question2 = new Question()
+            {
+                Id = 7,
+                Description = "Is this really going to work?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 14,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 15,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 15
+
+            };
+
+
+            _context.Questions.Add(question1);
+            _context.Questions.Add(question2);
+            _context.SaveChanges();
+
+            // change the chosenAnswerId to one that does not exist
+            question1.ChosenAnswerId = 15;
+
+
+            // Act 
+            var isUpdated = uow.UpdateQuestion(question1);
+
+            // Assert
+            Assert.IsFalse(isUpdated);
+        }
     }
 }
