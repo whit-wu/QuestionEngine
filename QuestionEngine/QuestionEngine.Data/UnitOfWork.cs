@@ -75,11 +75,31 @@ namespace QuestionEngine.Data
         }
         public bool DeleteQuestionById(int id)
         {
-            return true;
+            var questionToRemove = _context.Questions.Where(q => q.Id == id).FirstOrDefault();
+
+            if (questionToRemove != null)
+            {
+                try
+                {
+                    _context.Questions.Remove(questionToRemove);
+                    _context.SaveChanges();
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+
+
+            }
+
+            return false;
         }
         public Question GetQuestionById(int id)
         {
-            return new Question();
+            return _context.Questions.Where(q => q.Id == id).FirstOrDefault();
         }
     }
 }

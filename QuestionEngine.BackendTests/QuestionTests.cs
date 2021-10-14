@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace QuestionEngine.BackendTests
 {
-    public class Tests
+    public class QuestionTests
     {
         private DbContextOptions options;
         private QuestionEngineContext _context;
@@ -347,6 +347,118 @@ namespace QuestionEngine.BackendTests
 
             // Assert
             Assert.IsFalse(isUpdated);
+        }
+
+        [Test]
+        public void DeleteQuestion_FindsQuestionToDelete_ReturnsTrue()
+        {
+            // Arrange
+            var question = new Question()
+            {
+                Id = 8,
+                Description = "Can I delete this question?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 16,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 17,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 16
+
+            };
+
+            _context.Questions.Add(question);
+            _context.SaveChanges();
+
+            // Act
+            var isQuestionDeleted = uow.DeleteQuestionById(8);
+
+            // Assert
+            Assert.IsTrue(isQuestionDeleted);
+        }
+
+        [Test]
+        public void DeleteQuestion_DoesNotFindQuestionToDelete_ReturnsFalse()
+        {
+            // Arrange
+            var questionId = 99;
+
+            // Act
+            var isQuestionDeleted = uow.DeleteQuestionById(questionId);
+
+            // Assert
+            Assert.IsFalse(isQuestionDeleted);
+        }
+
+        [Test]
+        public void GetQuestionById_QuestionIsFound_ReturnsQuestion()
+        {
+            // Arrange
+            var question = new Question()
+            {
+                Id = 9,
+                Description = "Can I find this question?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 17,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 18,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 17
+
+            };
+
+            _context.Questions.Add(question);
+            _context.SaveChanges();
+
+            // Act
+            var foundQuestion = uow.GetQuestionById(9);
+
+            // Assert
+            Assert.AreEqual(question, foundQuestion);
+
+        }
+
+        [Test]
+        public void GetQuestionById_QuestionIsNotFound_ReturnsNull()
+        {
+            // Arrange
+            var questionId = 100;
+
+            // Act
+            var foundQuestion = uow.GetQuestionById(questionId);
+
+            // Assert
+            Assert.Null(foundQuestion);
+
         }
     }
 }
