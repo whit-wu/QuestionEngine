@@ -460,5 +460,7 @@ namespace QuestionEngine.BackendTests
             Assert.Null(foundQuestion);
 
         }
+
+        //todo add checks for null question descriptions
     }
 }

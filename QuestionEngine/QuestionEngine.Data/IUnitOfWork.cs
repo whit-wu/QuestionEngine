@@ -14,6 +14,10 @@ namespace QuestionEngine.Data
         public bool UpdateQuestion(Question question);
         public bool DeleteQuestionById(int id);
         public Question GetQuestionById(int id);
+        public bool AddAnswer(Answer answer);
+        public bool UpdateAnswer(Answer answer);
+        public bool DeleteAnswerById(int id);
+        public List<Answer> GetAnswersByQuestionId(int questionId);
 
     }
 }

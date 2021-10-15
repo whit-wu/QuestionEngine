@@ -101,5 +101,27 @@ namespace QuestionEngine.Data
         {
             return _context.Questions.Where(q => q.Id == id).FirstOrDefault();
         }
+
+        public bool AddAnswer(Answer answer)
+        {
+            return true;
+        }
+
+        public bool UpdateAnswer(Answer answer)
+        {
+            return true;
+        }
+
+        public bool DeleteAnswerById(int id)
+        {
+            return true;
+        }
+
+        public List<Answer> GetAnswersByQuestionId(int questionId)
+        {
+            return null;
+        }
+
+        
     }
 }
