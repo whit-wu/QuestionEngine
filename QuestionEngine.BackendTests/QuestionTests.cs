@@ -440,7 +440,7 @@ namespace QuestionEngine.BackendTests
             _context.SaveChanges();
 
             // Act
-            var foundQuestion = uow.GetQuestionById(9);
+            var foundQuestion = uow.GetQuestionById(900);
 
             // Assert
             Assert.AreEqual(question, foundQuestion);
