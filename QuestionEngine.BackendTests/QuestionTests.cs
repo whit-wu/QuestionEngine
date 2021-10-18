@@ -78,6 +78,133 @@ namespace QuestionEngine.BackendTests
 
         }
 
+
+        [Test]
+        public void AddQuestion_QuestionDescIsNull_ReturnsFalse()
+        {
+            // Arrange
+
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = null,
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            // Act
+            var questionWasAdded = uow.AddQuestion(validQuestionToAdd);
+
+            // Assert
+            Assert.IsFalse(questionWasAdded);
+
+
+        }
+
+
+        [Test]
+        public void AddQuestion_QuestionDescIsEmptyString_ReturnsFalse()
+        {
+            // Arrange
+
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = string.Empty,
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            // Act
+            var questionWasAdded = uow.AddQuestion(validQuestionToAdd);
+
+            // Assert
+            Assert.IsFalse(questionWasAdded);
+
+
+        }
+
+
+        [Test]
+        public void AddQuestion_QuestionHasEmptyAnswerDescs_ReturnsFalse()
+        {
+            // Arrange
+
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = "Will I return false?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = string.Empty,
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = string.Empty,
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            // Act
+            var questionWasAdded = uow.AddQuestion(validQuestionToAdd);
+
+            // Assert
+            Assert.IsFalse(questionWasAdded);
+
+
+        }
+
+
         [Test]
         public void AddQuestion_QuestionToAddIsInvalidBecauseThereIsNoChosenAnswer_ReturnsFalse()
         {
@@ -461,6 +588,5 @@ namespace QuestionEngine.BackendTests
 
         }
 
-        //todo add checks for null question descriptions
     }
 }

@@ -107,7 +107,7 @@ namespace QuestionEngine.BackendTests
 
 
             // Assert
-            Assert.IsTrue(answerWasAdded);
+            Assert.IsFalse(answerWasAdded);
         }
 
         [Test]
@@ -126,7 +126,7 @@ namespace QuestionEngine.BackendTests
 
 
             // Assert
-            Assert.IsTrue(answerWasAdded);
+            Assert.IsFalse(answerWasAdded);
         }
 
 
@@ -146,7 +146,224 @@ namespace QuestionEngine.BackendTests
 
 
             // Assert
-            Assert.IsTrue(answerWasAdded);
+            Assert.IsFalse(answerWasAdded);
+        }
+
+        [Test]
+        public void UpdateAnswer_AnswerIsValid_ReturnsTrue()
+        {
+            // Arrange
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = "Does adding a valid question work?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = "Maybe",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            _context.Questions.Add(validQuestionToAdd);
+            _context.SaveChanges();
+
+
+            // Act
+            validQuestionToAdd.AvailableAnswers[0].Description = "Yes";
+            var isUpdated = uow.UpdateAnswer(validQuestionToAdd.AvailableAnswers[0]);
+
+            // Assert
+            Assert.IsTrue(isUpdated);
+        }
+
+        [Test]
+        public void UpdateAnswer_NoQuestionIdFoundForQuestion_ReturnsFalse()
+        {
+            // Arrange
+            var answer = new Answer()
+            {
+                Id = 1,
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                Description = "No",
+                QuestionId = 99
+            };
+
+            // Act
+            var isUpdated = uow.UpdateAnswer(answer);
+
+            // Assert
+            Assert.IsFalse(isUpdated);
+
+        }
+
+        [Test]
+        public void UpdateAnswer_AnswerDescMissing_ReturnsFalse()
+        {
+            // Arrange
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = "Does adding a valid question work?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = "Maybe",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            _context.Questions.Add(validQuestionToAdd);
+            _context.SaveChanges();
+
+
+            // Act
+            validQuestionToAdd.AvailableAnswers[0].Description = string.Empty;
+            var isUpdated = uow.UpdateAnswer(validQuestionToAdd.AvailableAnswers[0]);
+
+            // Assert
+            Assert.IsFalse(isUpdated);
+        }
+
+        [Test]
+        public void DeleteAnswerById_AnswerIsRemoved_ReturnsTrue()
+        {
+            // Arrange
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = "Does removing a valid answer work?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = "Yes",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            _context.Questions.Add(validQuestionToAdd);
+            _context.SaveChanges();
+
+            // Act 
+            var isRemoved = uow.DeleteAnswerById(1);
+
+            // Assert 
+            Assert.IsTrue(isRemoved);
+
+        }
+
+        [Test]
+        public void DeleteAnswerById_AnswerIsNotFound_ReturnsFalse()
+        {
+            // Arrange
+            int answerIdThatDoesNotExist = 900;
+
+            // Act
+            var isRemoved = uow.DeleteAnswerById(answerIdThatDoesNotExist);
+
+            // Assert
+            Assert.IsFalse(isRemoved);
+
+        }
+
+        [Test]
+        public void GetAnswersByQuestionId_FindsAnswers_RetunsListOfAnswers()
+        {
+            // Arrange
+            var validQuestionToAdd = new Question()
+            {
+                Id = 1,
+                Description = "Does adding a valid question work?",
+                CreatedBy = userId,
+                CreatedOn = DateTime.Now,
+                AvailableAnswers = new List<Answer>() {
+                    new Answer()
+                    {
+                        Id = 1,
+                        Description = "Maybe",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    },
+                    new Answer()
+                    {
+                        Id = 2,
+                        Description = "No",
+                        QuestionId = 1,
+                        CreatedBy = userId,
+                        CreatedOn = DateTime.Now,
+                    }
+                },
+                ChosenAnswerId = 1
+            };
+
+            _context.Questions.Add(validQuestionToAdd);
+            _context.SaveChanges();
+
+            // Act
+            var listOfAnswers = uow.GetAnswersByQuestionId(1);
+
+            // Assert
+            Assert.AreEqual(listOfAnswers, validQuestionToAdd.AvailableAnswers);
+        }
+
+        [Test]
+        public void GetAnswersByQuestionId_DoesNotFindsAnswers_RetunsEmptyList()
+        {
+            // Arrange
+            int questionIdThatDoesNotExist = 32423;
+
+            // Act
+            var listOfAnswers = uow.GetAnswersByQuestionId(questionIdThatDoesNotExist);
+
+            // Assert
+            Assert.IsTrue(listOfAnswers.Count == 0);
         }
     }
 }

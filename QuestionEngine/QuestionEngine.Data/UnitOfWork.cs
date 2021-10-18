@@ -22,8 +22,16 @@ namespace QuestionEngine.Data
         {
             if (question != null)
             {
-                if (question.AvailableAnswers != null && question.AvailableAnswers.Count > 0 )
+                if (question.AvailableAnswers != null 
+                    && question.AvailableAnswers.Count > 0  
+                    && !string.IsNullOrWhiteSpace(question.Description))
                 {
+
+                    // check if answers are empty strings
+                    var hasEmptyStrings = question.AvailableAnswers.Where(x => string.IsNullOrWhiteSpace(x.Description)).Count();
+
+                    if (hasEmptyStrings > 0)
+                            return false;
 
                     try
                     {
@@ -104,22 +112,67 @@ namespace QuestionEngine.Data
 
         public bool AddAnswer(Answer answer)
         {
-            return true;
+            if (answer.QuestionId != null && !string.IsNullOrWhiteSpace(answer.Description))
+            {
+                try
+                {
+                    _context.Answers.Add(answer);
+                    _context.SaveChanges();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+            }
+            return false;
         }
 
         public bool UpdateAnswer(Answer answer)
         {
-            return true;
+            if (!string.IsNullOrWhiteSpace(answer.Description) && answer.QuestionId != null)
+            {
+                try
+                {
+                    _context.Answers.Update(answer);
+                    _context.SaveChanges();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         public bool DeleteAnswerById(int id)
         {
-            return true;
+            try
+            {
+                var answerToRemove = _context.Answers.Find(id);
+                if (answerToRemove != null)
+                {
+                    _context.Answers.Remove(answerToRemove);
+                    _context.SaveChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
+
+            return false;
         }
 
         public List<Answer> GetAnswersByQuestionId(int questionId)
         {
-            return null;
+            return _context.Answers.Where(x => x.QuestionId == questionId).ToList();
         }
 
         
