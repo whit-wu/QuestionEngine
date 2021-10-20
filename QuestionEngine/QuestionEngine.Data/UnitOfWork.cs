@@ -20,18 +20,18 @@ namespace QuestionEngine.Data
 
         public bool AddQuestion(Question question)
         {
-            if (question != null)
-            {
+            //if (question != null)
+            //{
                 if (question.AvailableAnswers != null 
                     && question.AvailableAnswers.Count > 0  
                     && !string.IsNullOrWhiteSpace(question.Description))
                 {
 
                     // check if answers are empty strings
-                    var hasEmptyStrings = question.AvailableAnswers.Where(x => string.IsNullOrWhiteSpace(x.Description)).Count();
+                    //var hasEmptyStrings = question.AvailableAnswers.Where(x => string.IsNullOrWhiteSpace(x.Description)).Count();
 
-                    if (hasEmptyStrings > 0)
-                            return false;
+                    //if (hasEmptyStrings > 0)
+                    //        return false;
 
                     try
                     {
@@ -47,7 +47,7 @@ namespace QuestionEngine.Data
                     
                     
                 }
-            }
+            //}
             return false;
         }
 
