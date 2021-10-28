@@ -32,7 +32,7 @@ namespace QuestionEngine.Data
             }
         }
 
-        public QuestionEngineContext(bool isUnitTestContext = true)
+        public QuestionEngineContext(bool isUnitTestContext)
         {
             var folder = Environment.SpecialFolder.LocalApplicationData;
             var path = Environment.GetFolderPath(folder);
@@ -44,6 +44,11 @@ namespace QuestionEngine.Data
         public QuestionEngineContext([NotNullAttribute] DbContextOptions options, bool isUnitTestContext) : base(options)
         {
             IsUnitTestContext = isUnitTestContext;
+        }
+
+        public QuestionEngineContext([NotNullAttribute] DbContextOptions options) : base(options)
+        {
+      
         }
 
 
