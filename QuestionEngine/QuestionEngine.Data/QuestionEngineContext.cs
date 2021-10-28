@@ -19,6 +19,8 @@ namespace QuestionEngine.Data
 
         public string DbPath { get; private set; }
 
+        public bool IsUnitTestContext { get; set; }
+
         private readonly string connectionString;
 
 
@@ -30,28 +32,31 @@ namespace QuestionEngine.Data
             }
         }
 
-        public QuestionEngineContext([NotNullAttribute] DbContextOptions options) : base(options)
+        public QuestionEngineContext(bool isUnitTestContext = true)
         {
+            var folder = Environment.SpecialFolder.LocalApplicationData;
+            var path = Environment.GetFolderPath(folder);
+            DbPath = $"{path}{System.IO.Path.DirectorySeparatorChar}QuestionEngine.db";
+            IsUnitTestContext = isUnitTestContext;
+           
         }
+
+        public QuestionEngineContext([NotNullAttribute] DbContextOptions options, bool isUnitTestContext) : base(options)
+        {
+            IsUnitTestContext = isUnitTestContext;
+        }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            // if we are running the whole app, use sql server
-            if (!options.IsConfigured)
+
+            if (!IsUnitTestContext)
             {
-                options.UseSqlServer(connectionString);
+                options.UseSqlite($" Data Source = QuestionEngine.db");
             }
         }
-
-
-        private static DbConnection CreateInMemoryDatabase()
-        {
-            var connection = new SqliteConnection("Filename=:memory:");
-
-            connection.Open();
-
-            return connection;
-        }
+        // The following configures EF to create a Sqlite database file in the
+        // special "local" folder for your platform.
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -62,6 +67,10 @@ namespace QuestionEngine.Data
             modelBuilder.Entity<Answer>()
                 .HasIndex(a => a.Id)
                 .IsUnique();
+
+            //modelBuilder.Entity<Survey>()
+            //    .HasIndex(s => s.Id)
+            //    .IsUnique();
         }
 
 

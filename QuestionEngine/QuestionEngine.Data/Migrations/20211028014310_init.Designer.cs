@@ -9,16 +9,16 @@ using QuestionEngine.Data;
 namespace QuestionEngine.Data.Migrations
 {
     [DbContext(typeof(QuestionEngineContext))]
-    [Migration("20210903020853_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20211028014310_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "5.0.9");
+                .HasAnnotation("ProductVersion", "5.0.11");
 
-            modelBuilder.Entity("QuestionEngine.Data.Model.Answer", b =>
+            modelBuilder.Entity("QuestionEngine.Model.Models.Answer", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,6 +31,7 @@ namespace QuestionEngine.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
@@ -39,20 +40,28 @@ namespace QuestionEngine.Data.Migrations
                     b.Property<DateTime>("LastModifiedOn")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("QuestionId")
+                    b.Property<int?>("QuestionId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Id")
+                        .IsUnique();
 
                     b.HasIndex("QuestionId");
 
                     b.ToTable("Answers");
                 });
 
-            modelBuilder.Entity("QuestionEngine.Data.Model.Question", b =>
+            modelBuilder.Entity("QuestionEngine.Model.Models.Question", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("ChosenAnswerId")
+                        .IsRequired()
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("CreatedBy")
@@ -62,6 +71,7 @@ namespace QuestionEngine.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("LastModifiedBy")
@@ -72,21 +82,22 @@ namespace QuestionEngine.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Id")
+                        .IsUnique();
+
                     b.ToTable("Questions");
                 });
 
-            modelBuilder.Entity("QuestionEngine.Data.Model.Answer", b =>
+            modelBuilder.Entity("QuestionEngine.Model.Models.Answer", b =>
                 {
-                    b.HasOne("QuestionEngine.Data.Model.Question", "Question")
+                    b.HasOne("QuestionEngine.Model.Models.Question", null)
                         .WithMany("AvailableAnswers")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Question");
                 });
 
-            modelBuilder.Entity("QuestionEngine.Data.Model.Question", b =>
+            modelBuilder.Entity("QuestionEngine.Model.Models.Question", b =>
                 {
                     b.Navigation("AvailableAnswers");
                 });
