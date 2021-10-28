@@ -25,14 +25,14 @@ namespace QuestionEngine.BackendTests
 
            
             // allows tables to be created first
-            using (var migContext = new QuestionEngineContext(options))
+            using (var migContext = new QuestionEngineContext(options, true))
             {
                 migContext.Database.EnsureCreated();
             }
 
            
             // the actual context
-            _context = new QuestionEngineContext(options);
+            _context = new QuestionEngineContext(options, true);
 
             uow = new UnitOfWork(_context);
         }

@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using QuestionEngine.Data;
 using System.Linq;
 
 namespace QuestionEngine.Server
@@ -25,6 +28,16 @@ namespace QuestionEngine.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            //services.AddDbContext<QuestionEngineContext>();
+            services.AddDbContext<QuestionEngineContext>(options =>
+            {
+                options.UseSqlite("Data Source = QuestionEngine.db");
+            });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
