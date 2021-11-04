@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuestionEngine.Model\QuestionEngine.Model.csproj" />
+    <ProjectReference Include="..\Shared\QuestionEngine.Shared.csproj" />
   </ItemGroup>
 
 </Project>

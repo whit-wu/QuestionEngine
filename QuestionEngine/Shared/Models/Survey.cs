@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QuestionEngine.Model.Models
+namespace QuestionEngine.Shared.Models
 {
     // for questions and answers, we make the uow do all the legwork
     // for validation, and in the backend.  let's see what happens
