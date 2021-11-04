@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using QuestionEngine.Data;
-using QuestionEngine.Model.Models;
+using QuestionEngine.Shared.Models;
 using System;
 using System.Collections.Generic;
 

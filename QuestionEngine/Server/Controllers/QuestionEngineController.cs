@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuestionEngine.Data;
-using QuestionEngine.Model.Models;
+using QuestionEngine.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

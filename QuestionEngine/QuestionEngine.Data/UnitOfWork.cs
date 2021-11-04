@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using QuestionEngine.Model.Models;
+using QuestionEngine.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
