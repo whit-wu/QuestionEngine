@@ -1,4 +1,5 @@
 ﻿
+using QuestionEngine.Shared.Rules;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,9 +15,11 @@ namespace QuestionEngine.Shared.Models
         public int Id { get; set; }
         
         [Required]
+        [DescriptionRules]
         public string Description { get; set; }
         
         [Required]
+        [AvailableAnswerRules]
         public List<Answer> AvailableAnswers { get; set; }
         
 

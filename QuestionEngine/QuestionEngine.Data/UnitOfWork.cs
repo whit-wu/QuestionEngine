@@ -22,16 +22,21 @@ namespace QuestionEngine.Data
         {
             if (question != null)
             {
-                if (question.AvailableAnswers != null 
-                    && question.AvailableAnswers.Count > 0  
-                    && !string.IsNullOrWhiteSpace(question.Description))
+                if (
+                    //question.AvailableAnswers != null 
+                    //&& question.AvailableAnswers.Count > 0  
+                    //&&
+                    !question.CheckRules() 
+                    //&&
+                    //!string.IsNullOrWhiteSpace(question.Description)
+                    )
                 {
 
                     // check if answers are empty strings
-                    var hasEmptyStrings = question.AvailableAnswers.Where(x => string.IsNullOrWhiteSpace(x.Description)).Count();
+                    //var hasEmptyStrings = question.AvailableAnswers.Where(x => string.IsNullOrWhiteSpace(x.Description)).Count();
 
-                    if (hasEmptyStrings > 0)
-                            return false;
+                    //if (hasEmptyStrings > 0)
+                    //        return false;
 
                     try
                     {
@@ -57,7 +62,8 @@ namespace QuestionEngine.Data
                 .Where(q => question.Id == q.Id)
                 .FirstOrDefault();
 
-            if (questionToUpdate != null && question.AvailableAnswers != null && question.AvailableAnswers.Count > 0)
+            //if (questionToUpdate != null && question.AvailableAnswers != null && question.AvailableAnswers.Count > 0)
+            if (questionToUpdate != null && !question.CheckRules())
             {
                 var availableAnswerIds = question.AvailableAnswers.Select(a => a.Id).ToArray();
                 
@@ -112,7 +118,8 @@ namespace QuestionEngine.Data
 
         public bool AddAnswer(Answer answer)
         {
-            if (answer.QuestionId != null && !string.IsNullOrWhiteSpace(answer.Description))
+            //if (answer.QuestionId != null && !string.IsNullOrWhiteSpace(answer.Description))
+            if( !answer.CheckRules())
             {
                 try
                 {
@@ -131,7 +138,8 @@ namespace QuestionEngine.Data
 
         public bool UpdateAnswer(Answer answer)
         {
-            if (!string.IsNullOrWhiteSpace(answer.Description) && answer.QuestionId != null)
+            //if (!string.IsNullOrWhiteSpace(answer.Description) && answer.QuestionId != null)
+            if(!answer.CheckRules())
             {
                 try
                 {
