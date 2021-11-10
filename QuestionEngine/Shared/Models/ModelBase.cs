@@ -34,6 +34,8 @@ namespace QuestionEngine.Shared.Models
             CheckRules(fieldName);
         }
 
+        
+        // find a way to call this after error has been removed
         public String Errors(String fieldName)
         {
             if (!_errors.ContainsKey(fieldName)) { _errors.Add(fieldName, new Dictionary<string, string>()); }

@@ -1,0 +1,83 @@
+﻿@page "/addSurvey"
+@using QuestionEngine.Shared.Models
+@inject HttpClient Http
+<h3>Add Survey</h3>
+
+<EditForm Model="@surveyToAdd">
+    <div>
+        <label>Input Survey Name:</label>
+        <InputText id="surveyName" @bind-Value="surveyToAdd.Name" />
+    </div>
+
+</EditForm>
+<br />
+
+@if (surveyToAdd != null && !string.IsNullOrWhiteSpace(surveyToAdd.Name))
+{
+
+
+    @if (surveyToAdd.Questions != null && surveyToAdd.Questions.Count > 0)
+    {
+
+        try
+        {
+
+            @foreach (var q in surveyToAdd.Questions)
+            {
+
+                <EditForm Model="q">
+                    <div>
+                        <label>Qusetion Desc:</label>
+                        <InputText id="questionDesc" @bind-Value="q.Description"></InputText>
+                        <small hidden="@(!q.CheckRules())" class="form-text" style="color:darkred;">@q.Errors("Description")</small>
+                    </div>
+                    <button disabled="@q.CheckRules()" type="submit">Submit</button>
+                    
+                    
+                </EditForm>
+                <br />
+            }
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
+
+    }
+    <button @onclick="AddQuestionToList">Add A Question</button>
+
+}
+
+
+
+
+@code {
+    private Survey surveyToAdd;
+
+
+
+    protected override void OnInitialized()
+    {
+        surveyToAdd = new Survey();
+        surveyToAdd.Questions = new List<Question>();
+
+    }
+
+    private void AddQuestionToList()
+    {
+        try
+        {
+            Question question = new Question();
+            surveyToAdd.Questions.Add(question);
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
+    }
+
+}
