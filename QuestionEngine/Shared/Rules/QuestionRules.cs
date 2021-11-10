@@ -40,7 +40,7 @@ namespace QuestionEngine.Shared.Rules
                 var desc = (string)fieldValue;
 
                 if (!string.IsNullOrWhiteSpace(desc))
-                    return new ValidationResult() { IsValid = true };
+                    return new ValidationResult() { IsValid = true};
             }
 
             return new ValidationResult() { IsValid = false, Message = message };

@@ -22,22 +22,8 @@ namespace QuestionEngine.Data
         {
             if (question != null)
             {
-                if (
-                    //question.AvailableAnswers != null 
-                    //&& question.AvailableAnswers.Count > 0  
-                    //&&
-                    !question.CheckRules() 
-                    //&&
-                    //!string.IsNullOrWhiteSpace(question.Description)
-                    )
+                if (!question.CheckRules())
                 {
-
-                    // check if answers are empty strings
-                    //var hasEmptyStrings = question.AvailableAnswers.Where(x => string.IsNullOrWhiteSpace(x.Description)).Count();
-
-                    //if (hasEmptyStrings > 0)
-                    //        return false;
-
                     try
                     {
                         _context.Questions.Add(question);
@@ -49,8 +35,6 @@ namespace QuestionEngine.Data
 
                         return false;
                     }
-                    
-                    
                 }
             }
             return false;
@@ -62,7 +46,6 @@ namespace QuestionEngine.Data
                 .Where(q => question.Id == q.Id)
                 .FirstOrDefault();
 
-            //if (questionToUpdate != null && question.AvailableAnswers != null && question.AvailableAnswers.Count > 0)
             if (questionToUpdate != null && !question.CheckRules())
             {
                 var availableAnswerIds = question.AvailableAnswers.Select(a => a.Id).ToArray();
@@ -118,7 +101,6 @@ namespace QuestionEngine.Data
 
         public bool AddAnswer(Answer answer)
         {
-            //if (answer.QuestionId != null && !string.IsNullOrWhiteSpace(answer.Description))
             if( !answer.CheckRules())
             {
                 try
@@ -138,7 +120,6 @@ namespace QuestionEngine.Data
 
         public bool UpdateAnswer(Answer answer)
         {
-            //if (!string.IsNullOrWhiteSpace(answer.Description) && answer.QuestionId != null)
             if(!answer.CheckRules())
             {
                 try

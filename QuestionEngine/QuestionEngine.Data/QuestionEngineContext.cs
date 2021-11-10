@@ -73,9 +73,9 @@ namespace QuestionEngine.Data
                 .HasIndex(a => a.Id)
                 .IsUnique();
 
-            //modelBuilder.Entity<Survey>()
-            //    .HasIndex(s => s.Id)
-            //    .IsUnique();
+            modelBuilder.Entity<Survey>()
+                .HasIndex(s => s.Id)
+                .IsUnique();
         }
 
 
