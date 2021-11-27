@@ -30,10 +30,33 @@
                         <label>Qusetion Desc:</label>
                         <InputText id="questionDesc" @bind-Value="q.Description"></InputText>
                         <small hidden="@(!q.CheckRules())" class="form-text" style="color:darkred;">@q.Errors("Description")</small>
+
+                        <br />
+
+                        @*for whatever reason a lamda needs to be used when calling a method with arguements on the razor page*@
+
+                        @if (q.AvailableAnswers != null && q.AvailableAnswers.Count > 0)
+                        {
+                            <div>
+                                @foreach (var a in q.AvailableAnswers)
+                                {
+                                    <label>Answer Desc:</label>
+                                    <InputText id="answerDesc" @bind-Value="a.Description"></InputText>
+                                    <small hidden="@(!a.CheckRules())" class="form-text" style="color:darkred;">@a.Errors("Description")</small>
+                                }
+                            </div>
+
+
+                        }
+
+                        <button @onclick="(e => AddAnswerToQuestion(q.Id))">Add Answer</button>
                     </div>
+
+
+                    <br />
                     <button disabled="@q.CheckRules()" type="submit">Submit</button>
-                    
-                    
+
+
                 </EditForm>
                 <br />
             }
@@ -55,6 +78,7 @@
 
 @code {
     private Survey surveyToAdd;
+    private int placeHolderQuestionId = -1;
 
 
 
@@ -63,6 +87,7 @@
         surveyToAdd = new Survey();
         surveyToAdd.Questions = new List<Question>();
 
+
     }
 
     private void AddQuestionToList()
@@ -70,7 +95,35 @@
         try
         {
             Question question = new Question();
+            question.Id = placeHolderQuestionId;
+            placeHolderQuestionId++;
             surveyToAdd.Questions.Add(question);
+
+        }
+        catch (Exception ex)
+        {
+
+            throw;
+        }
+
+    }
+
+    private void AddAnswerToQuestion(int questionId)
+    {
+        try
+        {
+            var question = surveyToAdd.Questions.Where(q => q.Id == questionId).FirstOrDefault();
+            if (question.AvailableAnswers == null)
+            {
+                surveyToAdd.Questions.Where(q => q.Id == questionId).FirstOrDefault().AvailableAnswers = new List<Answer>();
+            }
+
+            Answer answer = new Answer();
+            answer.QuestionId = questionId;
+            surveyToAdd.Questions.Where(q => q.Id == questionId).FirstOrDefault().AvailableAnswers.Add(answer);
+
+
+
         }
         catch (Exception ex)
         {
