@@ -14,7 +14,6 @@ namespace QuestionEngine.Shared.Models
         [Required]
         public int Id { get; set; }
         
-        [Required]
         [QuestionDescriptionRule]
         public string Description { get; set; }
         
