@@ -31,7 +31,6 @@
                         <InputText id="questionDesc" @bind-Value="q.Description"></InputText>
                         <small hidden="@(!q.CheckRules())" class="form-text" style="color:darkred;">@q.Errors("Description")</small>
                     </div>
-                    @*<button disabled="@q.CheckRules()" type="submit">Submit</button>*@
                     
                     
                 </EditForm>
