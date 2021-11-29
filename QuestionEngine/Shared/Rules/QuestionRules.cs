@@ -29,7 +29,7 @@ namespace QuestionEngine.Shared.Rules
         }
     }
 
-    public class DescriptionRules : Attribute, IModelRule
+    public class QuestionDescriptionRule : Attribute, IModelRule
     {
         public ValidationResult Validate(string fieldName, object fieldValue)
         {
