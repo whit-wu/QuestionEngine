@@ -105,9 +105,9 @@ namespace QuestionEngine.Data
             {
                 try
                 {
-                    _context.Answers.Add(answer);
-                    _context.SaveChanges();
-                    return true;
+                    //_context.Answers.Add(answer);
+                    //_context.SaveChanges();
+                    //return true;
                 }
                 catch (Exception ex)
                 {
