@@ -21,14 +21,14 @@ namespace QuestionEngine.Server.Controllers
         private string userId = "SYSTEM";
         private IUnitOfWork uow;
 
-        public QuestionEngineController()
+        public QuestionEngineController(IUnitOfWork _uow)
         {
 
             try
             {
-                _context = new QuestionEngineContext(false);
 
-                uow = new UnitOfWork(_context);
+
+                uow = _uow;
             }
             catch (Exception)
             {
