@@ -31,7 +31,7 @@ namespace QuestionEngine.Server
             //services.AddDbContext<QuestionEngineContext>();
             services.AddDbContext<QuestionEngineContext>(options =>
             {
-                options.UseSqlite("Data Source = QuestionEngine.db");
+                options.UseSqlite("Data Source = ../QuestionEngine.Data/QuestionEngine.db");
             });
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

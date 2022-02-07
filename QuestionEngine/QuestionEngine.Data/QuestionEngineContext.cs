@@ -41,24 +41,11 @@ namespace QuestionEngine.Data
            
         }
 
-        public QuestionEngineContext([NotNullAttribute] DbContextOptions options, bool isUnitTestContext) : base(options)
-        {
-            IsUnitTestContext = isUnitTestContext;
-        }
+     
 
         public QuestionEngineContext([NotNullAttribute] DbContextOptions options) : base(options)
         {
       
-        }
-
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-        {
-
-            if (!IsUnitTestContext)
-            {
-                options.UseSqlite($" Data Source = QuestionEngine.db");
-            }
         }
         // The following configures EF to create a Sqlite database file in the
         // special "local" folder for your platform.
